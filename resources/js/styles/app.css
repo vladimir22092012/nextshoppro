@@ -1,0 +1,79 @@
+* {
+    font-family: Inter;
+    margin: 0;
+    padding: 0;
+    font-weight: 100;
+}
+.top_menu {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+}
+.top_menu li {
+    float: left;
+}
+.top_menu li a {
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 100;
+    padding: 6px 0;
+    margin: 0 20px;
+    color: #29323a;
+    text-decoration: none;
+}
+.top-info {
+    background: #fed700;
+    margin-top: 10px;
+    padding: 20px 0;
+}
+.header_menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.header_menu li {
+    float: left;
+}
+.header_menu li a {
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 300;
+    padding: 6px 0;
+    margin: 0 6px;
+    color: #000;
+    text-decoration: none;
+}
+.searchInput {
+    background: none;
+    border:none;
+    outline: none;
+    font-weight: 200;
+    background-color: transparent!important;
+    color: #333e48!important;
+    padding: 0 25px 0 4px;
+    border-bottom: 1px solid rgba(51,62,72,.3);
+}
+.searchInput::placeholder {
+    font-weight: 200;
+    color: #333e48;
+}
+.search-box {
+    position: relative;
+}
+.btn-search {
+    position: absolute;
+    right: -10px;
+    top: 0;
+    cursor: pointer;
+}
+.panel_btns {
+    cursor: pointer;
+}
+.card_amount {
+    position: relative;
+    top: -6px;
+    display: inline-block;
+}
+.panel_btns {
+    font-weight: 400;
+}

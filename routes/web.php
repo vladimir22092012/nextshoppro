@@ -14,4 +14,56 @@ use App\Http\Controllers\SiteController;
 |
 */
 
+/** Пользовательские операции если не залогинен */
 Route::get('/', [SiteController::class, 'index'])->name('/');
+
+
+/** Всё для авторизации */
+Route::middleware('guest')->group(function () {
+
+    Route::get('/login', [\App\Http\Controllers\AuthController::class, 'login'])
+        ->name('login');
+    Route::post('/login', [\App\Http\Controllers\AuthController::class, 'auth'])
+        ->name('auth');
+
+    Route::get('/sign_up', [\App\Http\Controllers\SignUpController::class, 'form'])
+        ->name('signup.form');
+    Route::post('/sign_up', [\App\Http\Controllers\SignUpController::class, 'sign_up'])
+        ->name('signup');
+    Route::post('/signup/verify', [\App\Http\Controllers\SignUpController::class, 'verify'])
+        ->name('signup.verify');
+
+    Route::get('/forgot', [\App\Http\Controllers\ForgotController::class, 'form'])->
+    name('forgot.form');
+    Route::post('/forgot', [\App\Http\Controllers\ForgotController::class, 'forgot'])
+        ->name('forgot');
+    Route::post('/forgot/verify', [\App\Http\Controllers\ForgotController::class, 'verify'])
+        ->name('forgot.verify');
+
+});
+
+/** Пользовательские операции если залогинен */
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])
+        ->name('logout');
+});
+
+/** Панель управления*/
+Route::group(['middleware' => ['auth:sanctum', 'panel_user']], function (){
+    Route::group(['prefix' => 'admin'], function () {
+        Route::get('/', [\App\Http\Controllers\Admin\MainController::class, 'index'])
+            ->name('admin');
+
+        Route::group(['prefix' => 'products'], function () {
+            Route::get('', [\App\Http\Controllers\Admin\ProductsController::class, 'index'])
+                ->name('admin.products');
+            Route::get('/form', [\App\Http\Controllers\Admin\ProductsController::class, 'form'])
+                ->name('admin.products.form');
+            Route::get('/{product}', [\App\Http\Controllers\Admin\ProductsController::class, 'view'])
+                ->name('admin.product');
+        });
+
+    });
+
+
+});

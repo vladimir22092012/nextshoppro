@@ -1,25 +1,75 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
     <title inertia>{{env('APP_NAME')}}</title>
+
+    <!-- Custom fonts for this template-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,200,0,0" />
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/vue-multiselect@2.1.6/dist/vue-multiselect.min.css">
+    <link rel="stylesheet"
+          id="electro-fonts-css"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&amp;display=swap"
+          type="text/css" media="all">
+    <!-- Custom styles for this template-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i">
     <script>
         window.Laravel = {
             csrfToken: "{{ csrf_token() }}"
         }
     </script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    @routes
     @vite([
         'resources/js/app.js',
         "resources/js/Pages/{$page['component']}.vue",
         'resources/css/app.css',
+        /*'resources/js/template/vendor/jquery-3.3.1/jquery.min.js',
+        'resources/js/template/vendor/bootstrap-4.2.1/js/bootstrap.bundle.min.js',
+        'resources/js/template/vendor/owl-carousel-2.3.4/owl.carousel.min.js',
+        'resources/js/template/vendor/nouislider-12.1.0/nouislider.min.js',
+        'resources/js/template/js/number.js',
+        'resources/js/template/js/main.js',*/
     ])
     @inertiaHead
 </head>
-<body>
+<body class="page-top">
     @inertia
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="/vendor/jquery/jquery.min.js"></script>
+<!--    <script src="/vendor/jquery-3.3.1/jquery.min.js"></script>-->
+
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!--    <script src="/vendor/bootstrap-4.2.1/js/bootstrap.bundle.min.js"></script>-->
+
+    <script src="/vendor/owl-carousel-2.3.4/owl.carousel.min.js"></script>
+    <script src="/vendor/nouislider-12.1.0/nouislider.min.js"></script>
+    <script src="/js/number.js"></script>
+    <script src="/js/main.js"></script>
+    <!-- Bootstrap core JavaScript-->
+
+
+    <!-- Core plugin JavaScript-->
+<!--
+    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+-->
+
+    <!-- Custom scripts for all pages-->
+<!--    <script src="/js/sb-admin-2.min.js"></script>-->
+
+    <!-- Page level plugins -->
+<!--    <script src="/vendor/chart.js/Chart.min.js"></script>-->
+
+    <!-- Page level custom scripts -->
+<!--    <script src="/js/demo/chart-area-demo.js"></script>
+    <script src="/js/demo/chart-pie-demo.js"></script>-->
 </body>
 </html>
