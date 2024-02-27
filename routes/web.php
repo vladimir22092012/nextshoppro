@@ -16,6 +16,9 @@ use App\Http\Controllers\SiteController;
 
 /** Пользовательские операции если не залогинен */
 Route::get('/', [SiteController::class, 'index'])->name('/');
+Route::get('/catalog/{cat_id?}', [SiteController::class, 'catalog'])->name('catalog');
+Route::get('/search/{q?}', [SiteController::class, 'search'])->name('search');
+Route::get('/product/{product}', [SiteController::class, 'view'])->name('product');
 
 
 /** Всё для авторизации */

@@ -136,20 +136,14 @@
                                         <use xlink:href="images/sprite.svg#quickview-16"></use>
                                     </svg> <span class="fake-svg-icon"></span></button>
                                 <div class="product-card__image">
-                                    <a href="/"><img src="images/products/product-1.jpg" alt=""></a>
+                                    <Link :href="route('product', feature.id)"><img src="https://nextshop.pro/wa-data/public/shop/products/02/webp/24/00/24/images/13408/13408.253.webp" alt=""></Link>
                                 </div>
                                 <div class="product-card__info">
-                                    <div class="product-card__name"><a href="product.html">{{feature.name}}</a></div>
-                                    <ul class="product-card__features-list">
-                                        <li>Speed: 750 RPM</li>
-                                        <li>Power Source: Cordless-Electric</li>
-                                        <li>Battery Cell Type: Lithium</li>
-                                        <li>Voltage: 20 Volts</li>
-                                        <li>Battery Capacity: 2 Ah</li>
-                                    </ul>
+                                    <div class="product-card__name">
+                                        <Link :href="route('product', feature.id)">{{feature.name}}</Link>
+                                    </div>
                                 </div>
                                 <div class="product-card__actions">
-                                    <div class="product-card__availability">Availability: <span class="text-success">In Stock</span></div>
                                     <div class="product-card__prices">{{feature.price}}</div>
                                     <div class="product-card__buttons">
                                         <button class="btn btn-primary product-card__addtocart" type="button">Добавить в корзину</button>
@@ -178,20 +172,15 @@
                                     <div class="product-card__badge product-card__badge--hot">Hot</div>
                                 </div>
                                 <div class="product-card__image">
-                                    <a href="/"><img src="images/products/product-2.jpg" alt=""></a>
+                                    <Link :href="route('product', product.id)"><img src="https://nextshop.pro/wa-data/public/shop/products/02/webp/24/00/24/images/13408/13408.253.webp" alt=""></Link>
                                 </div>
                                 <div class="product-card__info">
-                                    <div class="product-card__name"><a href="product.html">{{product.name}}</a></div>
-                                    <ul class="product-card__features-list">
-                                        <li>Speed: 750 RPM</li>
-                                        <li>Power Source: Cordless-Electric</li>
-                                        <li>Battery Cell Type: Lithium</li>
-                                        <li>Voltage: 20 Volts</li>
-                                        <li>Battery Capacity: 2 Ah</li>
-                                    </ul>
+                                    <div class="product-card__name">
+                                        <Link :href="route('product', product.id)">{{product.name}}</Link>
+                                    </div>
+
                                 </div>
                                 <div class="product-card__actions">
-                                    <div class="product-card__availability">Availability: <span class="text-success">In Stock</span></div>
                                     <div class="product-card__prices">{{ product.price }}</div>
                                     <div class="product-card__buttons">
                                         <button class="btn btn-primary product-card__addtocart" type="button">В корзину</button>
@@ -1374,8 +1363,18 @@
 </template>
 <script>
 import SiteLayout from "@/Pages/components/Layout/SiteLayout.vue";
+import product from "@/Pages/Site/Product.vue";
+import { Link } from '@inertiajs/vue3'
 
 export default {
+    components: {
+        Link
+    },
+    methods: {
+        product() {
+            return product
+        }
+    },
     layout: SiteLayout,
     props: {
         feature: Object,

@@ -7,6 +7,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Repositories\Interfaces\CommonRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductRepository extends CommonRepository implements CommonRepositoryInterface {
 
@@ -72,13 +73,24 @@ class ProductRepository extends CommonRepository implements CommonRepositoryInte
     public function get(Request $request): array
     {
         $data = $request->all();
-        $limit = $data['limit'] ?? 20;
+        $limit = $data['limit'] ?? 18;
         $page = $data['page'] ?? 1;
         $sort = $data['sort'] ?? 'id';
         $order = $data['order'] ?? 'desc';
 
         $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($data)]);
         $query = Product::filter($filter)->with(['category'])->orderBy($sort, $order);
+
+        if (isset($data['query'])) {
+            $q = $data['query'];
+            $searchQeury = Product::query();
+            $arr = explode(' ', $q);
+            $searchQeury->select(DB::raw("id,(MATCH (products.name) against ('$q' IN NATURAL LANGUAGE MODE)) as score_name"));
+            $searchQeury->groupBy('score_name','id');
+            $searchQeury->having('score_name', '>', count($arr));
+            $query->whereIn('id', $searchQeury->get()->pluck('id'));
+        }
+
         if ($request->deleted) {
             $query->withTrashed();
         }
