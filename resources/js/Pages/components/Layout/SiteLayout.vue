@@ -55,38 +55,7 @@
         <!-- desktop site__header -->
         <header class="site__header d-lg-block d-none">
             <div class="site-header">
-                <!-- .topbar -->
-                <div class="site-header__topbar topbar">
-                    <div class="topbar__container container">
-                        <div class="topbar__row">
-                            <div class="topbar__item topbar__item--link"><a class="topbar-link" href="/">Оплата</a></div>
-                            <div class="topbar__item topbar__item--link"><a class="topbar-link" href="/">Доставка</a></div>
-                            <div class="topbar__item topbar__item--link"><a class="topbar-link" href="/">Гарантия</a></div>
-                            <div class="topbar__item topbar__item--link"><a class="topbar-link" href="/">Скидки</a></div>
-                            <div class="topbar__item topbar__item--link"><a class="topbar-link" href="/">Возврат товара</a></div>
-                            <div class="topbar__item topbar__item--link"><a class="topbar-link" href="/">Ремонт</a></div>
-                            <div class="topbar__spring"></div>
-                            <div class="topbar__item">
-                                <div class="topbar-dropdown">
-                                    <button class="topbar-dropdown__btn" type="button">Мой аккаунт
-                                        <svg width="7px" height="5px">
-                                            <use xlink:href="images/sprite.svg#arrow-rounded-down-7x5"></use>
-                                        </svg>
-                                    </button>
-                                    <div class="topbar-dropdown__body">
-                                        <!-- .menu -->
-                                        <ul class="menu menu--layout--topbar">
-                                            <li><a href="account.html">Войти</a></li>
-                                            <li><a href="account.html">Регистрация</a></li>
-                                        </ul>
-                                        <!-- .menu / end -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- .topbar / end -->
+                <HeaderVue></HeaderVue>
                 <div class="site-header__middle container">
                     <div class="site-header__logo">
                         <Link :href="route('/')">
@@ -115,9 +84,9 @@
                     <div class="nav-panel">
                         <div class="nav-panel__container container">
                             <div class="nav-panel__row">
-                                <div class="nav-panel__departments">
+                                <div class="nav-panel__departments" @click="showDropDown('showCategories')">
                                     <!-- .departments -->
-                                    <div class="departments departments--fixed" data-departments-fixed-by=".block-slideshow">
+                                    <div :class="{'departments': true, 'departments--opened': showCategories}" data-departments-fixed-by=".block-slideshow">
                                         <div class="departments__body">
                                             <div class="departments__links-wrapper">
                                                 <ul class="departments__links">
@@ -161,11 +130,16 @@
                                     </ul>
                                 </div>
                                 <!-- .nav-links / end -->
-                                <div class="nav-panel__indicators">
-                                    <div class="indicator"><a href="wishlist.html" class="indicator__button"><span class="indicator__area"><svg width="20px" height="20px"><use xlink:href="images/sprite.svg#heart-20"></use></svg> <span class="indicator__value">0</span></span></a></div>
-                                    <div class="indicator indicator--trigger--click"><a href="cart.html" class="indicator__button"><span class="indicator__area"><svg width="20px" height="20px"><use xlink:href="images/sprite.svg#cart-20"></use></svg> <span class="indicator__value">3</span></span></a>
+<!--                                <div class="nav-panel__indicators">
+                                    <div @click="showDropDown('openedCart')" :class="{'indicator indicator&#45;&#45;trigger&#45;&#45;click': true, 'indicator&#45;&#45;opened': openedCart}">
+                                      <a href="#" class="indicator__button">
+                                      <span class="indicator__area">
+                                        <svg width="20px" height="20px"><use xlink:href="images/sprite.svg#cart-20"></use></svg>
+                                        <span class="indicator__value">3</span>
+                                      </span>
+                                      </a>
                                         <div class="indicator__dropdown">
-                                            <!-- .dropcart -->
+                                            &lt;!&ndash; .dropcart &ndash;&gt;
                                             <div class="dropcart">
                                                 <div class="dropcart__products-list">
                                                     <div class="dropcart__product">
@@ -242,10 +216,10 @@
                                                 </div>
                                                 <div class="dropcart__buttons"><a class="btn btn-secondary" href="cart.html">View Cart</a> <a class="btn btn-primary" href="checkout.html">Checkout</a></div>
                                             </div>
-                                            <!-- .dropcart / end -->
+                                            &lt;!&ndash; .dropcart / end &ndash;&gt;
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                     </div>
@@ -341,19 +315,35 @@ export default {
     },
     data() {
         return {
-            query: '',
-            cats: this.$page?.props?.cats,
+          showCategories: false,
+          showAccountDropdown: false,
+          openedCart: false,
+          query: '',
+          cats: this.$page?.props?.cats,
         }
     },
     mounted() {
-        router.on('start', (event) => {
-            console.log(`Starting a visit to ${event.detail.visit.url}`)
-        })
+      /*document.addEventListener('click', event => {
+        console.log(event.target)
+      }, false)*/
+      if (window.location.pathname === '/') {
+        this.showCategories = true;
+      }
+      router.on('start', (event) => {
+          console.log(`Starting a visit to ${event.detail.visit.url}`)
+      })
     },
     methods: {
-        submitSearch() {
-            this.$inertia.get(route('search', this.query));
+      submitSearch() {
+        this.$inertia.get(route('search', this.query));
+      },
+      showDropDown(item) {
+        if (this[item] === false) {
+          this[item] = true;
+        } else {
+          this[item] = false;
         }
+      },
     }
 }
 </script>

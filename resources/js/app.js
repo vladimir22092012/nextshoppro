@@ -13,10 +13,13 @@ createInertiaApp({
     title: (title) => `${title}`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
-        return createApp({ render: () => h(App, props) })
-            .use(plugin)
+
+        const app = createApp({ render: () => h(App, props) })
+
+        app.use(plugin)
             .use(ZiggyVue, Ziggy)
             .use(VueSweetalert2)
             .mount(el)
+
     },
 })

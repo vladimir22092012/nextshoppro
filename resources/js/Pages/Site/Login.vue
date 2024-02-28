@@ -3,7 +3,10 @@
 $('body').addClass('bg-gradient-primary')
 
 import {useForm} from '@inertiajs/vue3';
-
+import cssCss from "@/template/css/style.css"
+import fontAvesomeCss from "@/template/vendor/fontawesome-5.6.1/css/all.min.css"
+import fontsCss from "@/template/fonts/stroyka/stroyka.css"
+import bootstrapCss from "@/template/vendor/bootstrap-4.2.1/css/bootstrap.min.css"
 
 export default {
     components: {

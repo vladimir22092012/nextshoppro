@@ -48,29 +48,7 @@
         <div class="products-view__list products-list" data-layout="grid-3-sidebar" data-with-features="false">
             <div class="products-list__body">
                 <div v-for="(item, index) in items" class="products-list__item">
-                    <div class="product-card">
-                        <button class="product-card__quickview" type="button">
-                            <svg width="16px" height="16px">
-                                <use xlink:href="images/sprite.svg#quickview-16"></use>
-                            </svg> <span class="fake-svg-icon"></span></button>
-                        <!--<div class="product-card__badges-list">
-                            <div class="product-card__badge product-card__badge&#45;&#45;new">New</div>
-                        </div>-->
-                        <div class="product-card__image">
-                            <Link :href="route('product', item.id)"><img src="https://nextshop.pro/wa-data/public/shop/products/02/webp/24/00/24/images/13408/13408.253.webp" alt=""></Link>
-                        </div>
-                        <div class="product-card__info">
-                            <div class="product-card__name"><Link :href="route('product', item.id)">{{item.name}}</Link></div>
-                        </div>
-                        <div class="product-card__actions">
-                            <div class="product-card__availability">Наличие: <span class="text-success">На складе</span></div>
-                            <div class="product-card__prices">{{item.price}}</div>
-                            <div class="product-card__buttons">
-                                <button class="btn btn-primary product-card__addtocart" type="button">Добавить в корзину</button>
-                                <button class="btn btn-secondary product-card__addtocart product-card__addtocart--list" type="button">Добавить в корзину</button>
-                            </div>
-                        </div>
-                    </div>
+                    <ProductCardMini :product="item"></ProductCardMini>
                 </div>
             </div>
         </div>
@@ -95,11 +73,13 @@
 <script>
 import {router} from "@inertiajs/vue3";
 import { Link } from '@inertiajs/vue3'
+import ProductCardMini from "@/Pages/components/Layout/ProductCardMini.vue";
 
 
 export default {
     components: {
-        Link,
+      ProductCardMini,
+      Link,
     },
     props: {
         pagination: {

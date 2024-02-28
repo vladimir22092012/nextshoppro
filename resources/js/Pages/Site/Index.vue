@@ -130,71 +130,13 @@
                 <div class="block-products__body">
                     <div class="block-products__featured">
                         <div class="block-products__featured-item">
-                            <div class="product-card">
-                                <button class="product-card__quickview" type="button">
-                                    <svg width="16px" height="16px">
-                                        <use xlink:href="images/sprite.svg#quickview-16"></use>
-                                    </svg> <span class="fake-svg-icon"></span></button>
-                                <div class="product-card__image">
-                                    <Link :href="route('product', feature.id)"><img src="https://nextshop.pro/wa-data/public/shop/products/02/webp/24/00/24/images/13408/13408.253.webp" alt=""></Link>
-                                </div>
-                                <div class="product-card__info">
-                                    <div class="product-card__name">
-                                        <Link :href="route('product', feature.id)">{{feature.name}}</Link>
-                                    </div>
-                                </div>
-                                <div class="product-card__actions">
-                                    <div class="product-card__prices">{{feature.price}}</div>
-                                    <div class="product-card__buttons">
-                                        <button class="btn btn-primary product-card__addtocart" type="button">Добавить в корзину</button>
-                                        <button class="btn btn-secondary product-card__addtocart product-card__addtocart--list" type="button">Добавить в корзину</button>
-                                        <button class="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__wishlist" type="button">
-                                            <svg width="16px" height="16px">
-                                                <use xlink:href="images/sprite.svg#wishlist-16"></use>
-                                            </svg> <span class="fake-svg-icon fake-svg-icon--wishlist-16"></span></button>
-                                        <button class="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__compare" type="button">
-                                            <svg width="16px" height="16px">
-                                                <use xlink:href="images/sprite.svg#compare-16"></use>
-                                            </svg> <span class="fake-svg-icon fake-svg-icon--compare-16"></span></button>
-                                    </div>
-                                </div>
-                            </div>
+                            <ProductCardMini :product="feature"></ProductCardMini>
                         </div>
                     </div>
                     <div class="block-products__list">
                         <div v-for="product in main_products" class="block-products__list-item">
                             <div class="product-card">
-                                <button class="product-card__quickview" type="button">
-                                    <svg width="16px" height="16px">
-                                        <use xlink:href="images/sprite.svg#quickview-16"></use>
-                                    </svg> <span class="fake-svg-icon"></span></button>
-                                <div class="product-card__badges-list">
-                                    <div class="product-card__badge product-card__badge--hot">Hot</div>
-                                </div>
-                                <div class="product-card__image">
-                                    <Link :href="route('product', product.id)"><img src="https://nextshop.pro/wa-data/public/shop/products/02/webp/24/00/24/images/13408/13408.253.webp" alt=""></Link>
-                                </div>
-                                <div class="product-card__info">
-                                    <div class="product-card__name">
-                                        <Link :href="route('product', product.id)">{{product.name}}</Link>
-                                    </div>
-
-                                </div>
-                                <div class="product-card__actions">
-                                    <div class="product-card__prices">{{ product.price }}</div>
-                                    <div class="product-card__buttons">
-                                        <button class="btn btn-primary product-card__addtocart" type="button">В корзину</button>
-                                        <button class="btn btn-secondary product-card__addtocart product-card__addtocart--list" type="button">В корзину</button>
-                                        <button class="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__wishlist" type="button">
-                                            <svg width="16px" height="16px">
-                                                <use xlink:href="images/sprite.svg#wishlist-16"></use>
-                                            </svg> <span class="fake-svg-icon fake-svg-icon--wishlist-16"></span></button>
-                                        <button class="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__compare" type="button">
-                                            <svg width="16px" height="16px">
-                                                <use xlink:href="images/sprite.svg#compare-16"></use>
-                                            </svg> <span class="fake-svg-icon fake-svg-icon--compare-16"></span></button>
-                                    </div>
-                                </div>
+                              <ProductCardMini :product="product"></ProductCardMini>
                             </div>
                         </div>
                     </div>
@@ -1364,11 +1306,13 @@
 <script>
 import SiteLayout from "@/Pages/components/Layout/SiteLayout.vue";
 import product from "@/Pages/Site/Product.vue";
+import ProductCardMini from "@/Pages/components/Layout/ProductCardMini.vue";
 import { Link } from '@inertiajs/vue3'
 
 export default {
     components: {
-        Link
+      Link,
+      ProductCardMini
     },
     methods: {
         product() {
