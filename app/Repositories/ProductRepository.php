@@ -84,8 +84,8 @@ class ProductRepository extends CommonRepository implements CommonRepositoryInte
         if (isset($data['query'])) {
             $q = $data['query'];
             $searchQeury = Product::query();
-            $arr = explode(' ', $q);
-            $searchQeury->select(DB::raw("id,(MATCH (products.name) against ('$q' IN NATURAL LANGUAGE MODE)) as score_name"));
+            $arr = explode(' ', strtolower($q));
+            $searchQeury->select(DB::raw("id,(MATCH (LOWER(products.name)) against ('$q' IN NATURAL LANGUAGE MODE)) as score_name"));
             $searchQeury->groupBy('score_name','id');
             $searchQeury->having('score_name', '>', count($arr));
             $query->whereIn('id', $searchQeury->get()->pluck('id'));
