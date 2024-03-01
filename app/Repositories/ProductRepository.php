@@ -89,7 +89,6 @@ class ProductRepository extends CommonRepository implements CommonRepositoryInte
             $searchQeury->groupBy('score_name','id');
             $searchQeury->having('score_name', '>', count($arr));
             $searchQeury->orderBy('score_name', 'ASC');
-            $ids = $searchQeury->get()->pluck('id');
 
             if ($request->deleted) {
                 $searchQeury->withTrashed();
@@ -101,7 +100,12 @@ class ProductRepository extends CommonRepository implements CommonRepositoryInte
                 $searchQeury = $searchQeury->limit($limit)->offset(($page - 1) * $limit);
             }
 
-            $items = ProductResource::collection(Product::whereIn('id', $ids)->get())->resolve();
+            $products = [];
+            foreach ($searchQeury->get() as $product) {
+                $products[] = Product::find($product->id);
+            }
+
+            $items = ProductResource::collection($products)->resolve();
         } else {
             if ($request->deleted) {
                 $query->withTrashed();
