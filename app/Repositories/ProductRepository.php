@@ -88,20 +88,34 @@ class ProductRepository extends CommonRepository implements CommonRepositoryInte
             $searchQeury->select(DB::raw("id,(MATCH (products.name) against ('$q' IN NATURAL LANGUAGE MODE)) as score_name"));
             $searchQeury->groupBy('score_name','id');
             $searchQeury->having('score_name', '>', count($arr));
-            $query->whereIn('id', $searchQeury->get()->pluck('id'));
+            $searchQeury->orderBy('score_name', 'ASC');
+
+            if ($request->deleted) {
+                $searchQeury->withTrashed();
+            }
+
+            $count = $searchQeury->count();
+
+            if ($limit > 0) {
+                $searchQeury = $searchQeury->limit($limit)->offset(($page - 1) * $limit);
+            }
+
+            $items = ProductResource::collection($searchQeury->get())->resolve();
+        } else {
+            if ($request->deleted) {
+                $query->withTrashed();
+            }
+
+            $count = $query->count();
+
+            if ($limit > 0) {
+                $query = $query->limit($limit)->offset(($page - 1) * $limit);
+            }
+
+            $items = ProductResource::collection($query->get())->resolve();
         }
 
-        if ($request->deleted) {
-            $query->withTrashed();
-        }
 
-        $count = $query->count();
-
-        if ($limit > 0) {
-            $query = $query->limit($limit)->offset(($page - 1) * $limit);
-        }
-
-        $items = ProductResource::collection($query->get())->resolve();
 
         return [
             'data' => $items,
