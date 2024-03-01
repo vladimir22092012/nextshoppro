@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Http\Filters\ProductFilter;
 use App\Http\Resources\ProductResource;
+use App\Models\Category;
 use App\Models\Product;
 use App\Repositories\Interfaces\CommonRepositoryInterface;
 use Illuminate\Http\Request;
@@ -83,10 +84,16 @@ class ProductRepository extends CommonRepository implements CommonRepositoryInte
 
         if (isset($data['query'])) {
             $q = $data['query'];
+
+            $categoryQuery = Category::query();
+            $categoryQuery->select(DB::raw("id,(MATCH (categories.name) against ('$q' IN NATURAL LANGUAGE MODE)) as score_name"));
+            $cats = $categoryQuery->get()->pluck('id');
+
             $searchQeury = Product::query();
             $arr = explode(' ', $q);
-            $searchQeury->select(DB::raw("id,(MATCH (products.name) against ('$q' IN NATURAL LANGUAGE MODE)) as score_name"));
-            $searchQeury->groupBy('score_name','id');
+            $searchQeury->select(DB::raw("id,category_id,(MATCH (products.name) against ('$q' IN NATURAL LANGUAGE MODE)) as score_name"));
+            $searchQeury->whereIn('category_id', $cats);
+            $searchQeury->groupBy('score_name','id', 'category_id');
             $searchQeury->having('score_name', '>', count($arr));
             $searchQeury->orderBy('score_name', 'ASC');
 
