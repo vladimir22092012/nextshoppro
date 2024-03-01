@@ -104,7 +104,7 @@ class ProductRepository extends CommonRepository implements CommonRepositoryInte
             foreach ($searchQeury->get() as $product) {
                 $products[] = Product::find($product->id);
             }
-
+            dd($products);
             $items = ProductResource::collection($products)->resolve();
         } else {
             if ($request->deleted) {
