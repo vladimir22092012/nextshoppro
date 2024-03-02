@@ -64,7 +64,7 @@ return [
         ],
         'sphinx' => [
             'driver'   => 'sphinx',
-            'host'     => '127.0.0.1',
+            'host'     => 'localhost',
             'port' => 9306,
             'database' => env('DB_DATABASE', 'forge'),
         ],
