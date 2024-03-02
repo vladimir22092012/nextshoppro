@@ -7,6 +7,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\Category;
 use App\Models\Product;
 use App\Repositories\Interfaces\CommonRepositoryInterface;
+use App\Services\GlobalSearch\FireWind;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -85,7 +86,9 @@ class ProductRepository extends CommonRepository implements CommonRepositoryInte
         if (isset($data['query'])) {
             $q = $data['query'];
 
-            $categoryQuery = Category::query();
+            dd(Product::match('name', $q)->get());
+
+            /*$categoryQuery = Category::query();
             $categoryQuery->select(DB::raw("id,(MATCH (categories.name) against ('$q' IN NATURAL LANGUAGE MODE)) as score_name"));
             $cats = $categoryQuery->get()->pluck('id');
 
@@ -111,7 +114,8 @@ class ProductRepository extends CommonRepository implements CommonRepositoryInte
             foreach ($searchQeury->get() as $product) {
                 $products[] = Product::find($product->id);
             }
-            $items = ProductResource::collection($products)->resolve();
+            $items = ProductResource::collection($products)->resolve();*/
+
         } else {
             if ($request->deleted) {
                 $query->withTrashed();

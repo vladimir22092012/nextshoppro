@@ -9,19 +9,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Product extends Model
+class Product extends \Fobia\Database\SphinxConnection\Eloquent\Model
 {
     use HasFactory, SoftDeletes, Filterable;
 
-    protected $fillable = [
-        'category_id',
-        'article',
-        'name',
-        'short_description',
-        'description',
-        'price',
-        'count',
-    ];
+    protected $guarded = [];
 
     protected $appends = [
         'formattedPrice'

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Console\Kernel;
 use App\Models\Category;
 use App\Models\Product;
+use App\Services\GlobalSearch\FireWind;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -29,7 +30,19 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $this->import_products();
+        $fireWind = new FireWind();
+        $q = "дисплей iphone 7 белый";
+        $query = $fireWind->make_index($q);
+
+        $result = [];
+        $products = Product::all();
+        foreach ($products as $product) {
+            $range = $fireWind->search($query, json_decode($product->search_indexes));
+            if ($range > 0) {
+                $result[$product->id] = $product;
+            }
+        }
+        dd($result);
     }
 
     public function import_categories()

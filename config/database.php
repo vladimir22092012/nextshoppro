@@ -62,7 +62,14 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
-
+        'sphinx' => [
+            'driver'   => 'sphinx',
+            'host'     => env('DB_HOST', env('DB_HOST','127.0.0.1')),
+            'port' => 3306,
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
+        ],
         'next_mysql' => [
             'driver' => 'mysql',
             'url' => env('NEXT_DATABASE_URL'),
