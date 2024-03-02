@@ -86,7 +86,7 @@ class ProductRepository extends CommonRepository implements CommonRepositoryInte
         if (isset($data['query'])) {
             $q = $data['query'];
 
-            $db = DB::connection('sphinx')->table('idx_products_name')->toSql();
+            $db = DB::connection('sphinx')->table('idx_products_name')->whereRaw('MATCH('.$q.')')->toSql();
             dd($db);
 
             /*$categoryQuery = Category::query();
