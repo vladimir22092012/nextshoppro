@@ -66,7 +66,7 @@ return [
             'driver'   => 'sphinx',
             'host'     => env('DB_HOST', env('DB_HOST','127.0.0.1')),
             'port' => 9306,
-            'database' => 'idx_products_name',
+            'database' => env('DB_DATABASE', 'forge'),
         ],
         'next_mysql' => [
             'driver' => 'mysql',
