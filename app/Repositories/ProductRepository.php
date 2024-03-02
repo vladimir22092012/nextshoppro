@@ -68,7 +68,7 @@ class ProductRepository extends CommonRepository implements CommonRepositoryInte
 
     public function main_page_products()
     {
-        $products = Product::query()->limit(7)->inRandomOrder()->get();
+        $products = Product::query()->limit(7)->get();
         return ProductResource::collection($products)->resolve();
     }
 
