@@ -6,6 +6,58 @@
             <div class="modal-content"></div>
         </div>
     </div>
+
+  <div :class="{'mobilemenu': true, 'mobilemenu--open': mobileMenu}">
+    <div class="mobilemenu__backdrop"></div>
+    <div class="mobilemenu__body">
+      <div class="mobilemenu__header">
+        <div class="mobilemenu__title">Категории</div>
+        <button @click="showDropDown('mobileMenu')" type="button" class="mobilemenu__close">
+          <svg width="20px" height="20px">
+            <use xlink:href="/images/sprite.svg#cross-20"></use>
+          </svg>
+        </button>
+      </div>
+      <div class="mobilemenu__content">
+        <ul class="mobile-links mobile-links--level--0" data-collapse="" data-collapse-opened-class="mobile-links__item--open">
+          <li v-for="mainCat in cats" :class="{'mobile-links__item': true, 'mobile-links__item--open': mainCat.opened}" data-collapse-item="">
+            <div class="mobile-links__item-title">
+              <Link class="mobile-links__item-link" :href="route('catalog', mainCat.id)">{{mainCat.name}}</Link>
+              <button @click="mainCat.opened === true ? mainCat.opened = false : mainCat.opened = true" class="mobile-links__item-toggle" type="button" data-collapse-trigger="">
+                <svg class="mobile-links__item-arrow" width="12px" height="7px">
+                  <use xlink:href="/images/sprite.svg#arrow-rounded-down-12x7"></use>
+                </svg>
+              </button>
+            </div>
+            <div v-for="secondCat in mainCat.dom" class="mobile-links__item-sub-links" data-collapse-content="">
+              <ul class="mobile-links mobile-links--level--1">
+                <li class="mobile-links__item" data-collapse-item="">
+                  <div class="mobile-links__item-title">
+                    <Link class="mobile-links__item-link" :href="route('catalog', secondCat.id)">{{secondCat.name}}</Link>
+                    <button @click="secondCat.opened === true ? secondCat.opened = false : secondCat.opened = true" class="mobile-links__item-toggle" type="button" data-collapse-trigger="">
+                      <svg class="mobile-links__item-arrow" width="12px" height="7px">
+                        <use xlink:href="/images/sprite.svg#arrow-rounded-down-12x7"></use>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="mobile-links__item-sub-links" data-collapse-content="">
+                    <ul class="mobile-links mobile-links--level--2">
+                      <li v-for="thirdCat in secondCat.dom" :class="{'mobile-links__item': true, 'mobile-links__item--open': secondCat.opened}" data-collapse-item="">
+                        <div class="mobile-links__item-title">
+                          <Link class="mobile-links__item-link" :href="route('catalog', thirdCat.id)">{{thirdCat.name}}</Link>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
     <!-- quickview-modal / end -->
     <!-- site -->
     <div class="site">
@@ -15,36 +67,32 @@
                 <div class="mobile-header__panel">
                     <div class="container">
                         <div class="mobile-header__body">
-                            <button class="mobile-header__menu-button">
+                            <button  @click="showDropDown('mobileMenu')" class="mobile-header__menu-button">
                                 <svg width="18px" height="14px">
-                                    <use xlink:href="images/sprite.svg#menu-18x14"></use>
+                                    <use xlink:href="/images/sprite.svg#menu-18x14"></use>
                                 </svg>
                             </button>
-                            <Link class="mobile-header__logo" :href="route('/')">
-                                <img src="/images/logo.png" alt="">
-                            </Link>
-                            <div class="mobile-header__search">
+                            <div :class="{'mobile-header__search': true, 'mobile-header__search--opened': openMobileSearch}">
                                 <form @submit.prevent="submitSearch" class="mobile-header__search-form">
                                     <input class="mobile-header__search-input" v-model="query" placeholder="Поиск товаров по каталогу" aria-label="Site search" type="text" autocomplete="off">
                                     <button @click.prevent="submitSearch" class="mobile-header__search-button mobile-header__search-button--submit" type="button">
                                         <svg width="20px" height="20px">
-                                            <use xlink:href="images/sprite.svg#search-20"></use>
+                                            <use xlink:href="/images/sprite.svg#search-20"></use>
                                         </svg>
                                     </button>
-                                    <button class="mobile-header__search-button mobile-header__search-button--close" type="button">
+                                    <button @click="showDropDown('openMobileSearch')" class="mobile-header__search-button mobile-header__search-button--close" type="button">
                                         <svg width="20px" height="20px">
-                                            <use xlink:href="images/sprite.svg#cross-20"></use>
+                                            <use xlink:href="/images/sprite.svg#cross-20"></use>
                                         </svg>
                                     </button>
                                     <div class="mobile-header__search-body"></div>
                                 </form>
                             </div>
                             <div class="mobile-header__indicators">
-                                <div class="indicator indicator--mobile-search indicator--mobile d-sm-none">
-                                    <button class="indicator__button"><span class="indicator__area"><svg width="20px" height="20px"><use xlink:href="images/sprite.svg#search-20"></use></svg></span></button>
+                                <div @click="showDropDown('openMobileSearch')" class="indicator indicator--mobile-search indicator--mobile d-sm-none">
+                                    <button class="indicator__button"><span class="indicator__area"><svg width="20px" height="20px"><use xlink:href="/images/sprite.svg#search-20"></use></svg></span></button>
                                 </div>
-                                <div class="indicator indicator--mobile d-sm-flex d-none"><a href="#" class="indicator__button"><span class="indicator__area"><svg width="20px" height="20px"><use xlink:href="images/sprite.svg#heart-20"></use></svg> <span class="indicator__value">0</span></span></a></div>
-                                <div class="indicator indicator--mobile"><a href="#" class="indicator__button"><span class="indicator__area"><svg width="20px" height="20px"><use xlink:href="images/sprite.svg#cart-20"></use></svg> <span class="indicator__value">3</span></span></a></div>
+                                <div class="indicator indicator--mobile"><a href="#" class="indicator__button"><span class="indicator__area"><svg width="20px" height="20px"><use xlink:href="/images/sprite.svg#cart-20"></use></svg> <span class="indicator__value">3</span></span></a></div>
                             </div>
                         </div>
                     </div>
@@ -68,7 +116,7 @@
                                 <input class="search__input" v-model="query" placeholder="Поиск товаров по каталогу" aria-label="Site search" type="text" autocomplete="off">
                                 <button class="search__button" @click.prevent="submitSearch" type="button">
                                     <svg width="20px" height="20px">
-                                        <use xlink:href="images/sprite.svg#search-20"></use>
+                                        <use xlink:href="/images/sprite.svg#search-20"></use>
                                     </svg>
                                 </button>
                                 <div class="search__border"></div>
@@ -90,7 +138,7 @@
                                         <div class="departments__body">
                                             <div class="departments__links-wrapper">
                                                 <ul class="departments__links">
-                                                    <li v-for="mainCat in cats" class="departments__item"><Link :href="route('catalog', mainCat.id)">{{mainCat.name}} <svg class="departments__link-arrow" width="6px" height="9px"><use xlink:href="images/sprite.svg#arrow-rounded-right-6x9"></use></svg></Link>
+                                                    <li v-for="mainCat in cats" class="departments__item"><Link :href="route('catalog', mainCat.id)">{{mainCat.name}} <svg class="departments__link-arrow" width="6px" height="9px"><use xlink:href="/images/sprite.svg#arrow-rounded-right-6x9"></use></svg></Link>
                                                         <div class="departments__megamenu departments__megamenu--xl">
                                                             <!-- .megamenu -->
                                                             <div class="megamenu megamenu--departments">
@@ -114,10 +162,10 @@
                                         </div>
                                         <button class="departments__button">
                                             <svg class="departments__button-icon" width="18px" height="14px">
-                                                <use xlink:href="images/sprite.svg#menu-18x14"></use>
+                                                <use xlink:href="/images/sprite.svg#menu-18x14"></use>
                                             </svg> Категории товаров
                                             <svg class="departments__button-arrow" width="9px" height="6px">
-                                                <use xlink:href="images/sprite.svg#arrow-rounded-down-9x6"></use>
+                                                <use xlink:href="/images/sprite.svg#arrow-rounded-down-9x6"></use>
                                             </svg>
                                         </button>
                                     </div>
@@ -287,7 +335,7 @@
                     </div>
                     <div class="site-footer__bottom">
                         <div class="site-footer__copyright"><a target="_blank" href="/">2014-2024 © NEXT — Интернет-магазин товаров и запчастей к вашим гаджетам.</a></div>
-                        <div class="site-footer__payments"><img src="images/payments.png" alt=""></div>
+                        <div class="site-footer__payments"><img src="/images/payments.png" alt=""></div>
                     </div>
                 </div>
             </div>
@@ -315,6 +363,8 @@ export default {
     },
     data() {
         return {
+          mobileMenu: false,
+          openMobileSearch: false,
           showCategories: false,
           showAccountDropdown: false,
           openedCart: false,

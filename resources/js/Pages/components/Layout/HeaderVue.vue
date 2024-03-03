@@ -14,7 +14,7 @@
           <div :class="{'topbar-dropdown': true, 'topbar-dropdown--opened': showAccountDropdown}">
             <button @click="showDropDown('showAccountDropdown')" class="topbar-dropdown__btn" type="button">Мой аккаунт
               <svg width="7px" height="5px">
-                <use xlink:href="images/sprite.svg#arrow-rounded-down-7x5"></use>
+                <use xlink:href="/images/sprite.svg#arrow-rounded-down-7x5"></use>
               </svg>
             </button>
             <div v-show="showAccountDropdown" class="topbar-dropdown__body">

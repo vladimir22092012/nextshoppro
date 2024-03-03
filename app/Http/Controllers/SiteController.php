@@ -27,6 +27,7 @@ class SiteController extends Controller
     public function index(): Response
     {
         $products = $this->repository->main_page_products();
+        //dd($products);
         $feature = $products[0];
         unset($products[0]);
         return Inertia::render('Site/Index', [
@@ -63,7 +64,8 @@ class SiteController extends Controller
     public function view(Product $product): Response
     {
         return Inertia::render('Site/Product', [
-            'product' => $product
+            'product' => $product,
+            'images' => $product->normalizeImages,
         ]);
     }
 

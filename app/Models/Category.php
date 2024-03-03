@@ -32,12 +32,14 @@ class Category extends Model
                     $domCatsChild[] = [
                         'id' => $value->id,
                         'name' => $value->name,
+                        'opened' => false,
                     ];
                 }
 
                 $domCats[] = [
                     'id' => $item->id,
                     'name' => $item->name,
+                    'opened' => false,
                     'dom' => $domCatsChild
                 ];
             }
@@ -45,6 +47,7 @@ class Category extends Model
             $cats[] = [
                 'id' => $main->id,
                 'name' => $main->name,
+                'opened' => false,
                 'dom' => $domCats
             ];
         }

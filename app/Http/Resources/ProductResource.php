@@ -34,6 +34,8 @@ class ProductResource extends JsonResource
                 Html::getAlert('Активный'),
             'deleted_at' => $this->deleted_at ?
                 Carbon::parse($this->deleted_at)->format(DateHelper::DEFAULT_FORMAT) : '',
+            'images' => $this->normalizeImages,
+            'main_image' => $this->mainImage
         ];
     }
 }

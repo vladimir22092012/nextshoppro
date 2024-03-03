@@ -85,9 +85,32 @@ class ProductRepository extends CommonRepository implements CommonRepositoryInte
 
         if (isset($data['query'])) {
             $q = $data['query'];
+            $fireWind = new FireWind();
+            $query = $fireWind->make_index($q);
+            $result = [];
+            $products = Product::all();
+            foreach ($products as $product) {
+                $range = $fireWind->search($query, json_decode($product->search_indexes));
+                if ($range > 0) {
+                    $result[$product->id] = $range;
+                }
+            }
+            if (isset($result)) {
+                arsort( $result , SORT_ASC);
+                $searchQeury = Product::query()->whereIn('id', array_chunk(array_keys($result), 15)[0]);
 
-            $db = DB::connection('sphinx')->table('idx_products_name')->whereRaw("MATCH('$q')")->get();
-            dd($db);
+                $count = $searchQeury->count();
+
+                if ($limit > 0) {
+                    $searchQeury = $searchQeury->limit($limit)->offset(($page - 1) * $limit);
+                }
+
+
+                $items = ProductResource::collection($searchQeury->get())->resolve();
+            } else {
+                $count = 0;
+                $items = [];
+            }
 
             /*$categoryQuery = Category::query();
             $categoryQuery->select(DB::raw("id,(MATCH (categories.name) against ('$q' IN NATURAL LANGUAGE MODE)) as score_name"));

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Console\Kernel;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Services\GlobalSearch\FireWind;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -30,19 +31,45 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $fireWind = new FireWind();
-        $q = "дисплей iphone 7 белый";
-        $query = $fireWind->make_index($q);
+        $this->download_images();
+    }
 
-        $result = [];
-        $products = Product::all();
-        foreach ($products as $product) {
-            $range = $fireWind->search($query, json_decode($product->search_indexes));
-            if ($range > 0) {
-                $result[$product->id] = $product;
+    public function download_images()
+    {
+        $pids = [];
+        foreach (scandir('/var/www/html/nextshoppro/public/images/products/') as $item) {
+            if ($item != '.' && $item != '..') {
+                $pids[] = $item;
             }
         }
-        dd($result);
+        $ids = '';
+        Product::query()->whereNotIn('id', $pids)->withTrashed()->get()->each(function ($product) use (&$ids) {
+            $ids .= ','.$product->id;
+        });
+        file_put_contents(__DIR__.'/products_ids.txt', $ids);
+    }
+
+    public function import_images()
+    {
+        DB::connection('next_mysql')->table('shop_product_images')->get()->map(function($image) {
+            if (Product::find($image->product_id)) {
+                $newImage = ProductImage::create([
+                    'id' => $image->id,
+                    'product_id' => $image->product_id,
+                    'title' => $image->description,
+                    'sort' => $image->sort,
+                    'width' => $image->width,
+                    'height' => $image->height,
+                    'size' => $image->size,
+                    'original_filename' => $image->original_filename,
+                    'ext' => $image->ext,
+                    'created_at' => $image->upload_datetime,
+                    'updated_at' => $image->upload_datetime,
+                ]);
+                $newImage->id = $image->id;
+                $newImage->save();
+            }
+        });
     }
 
     public function import_categories()
