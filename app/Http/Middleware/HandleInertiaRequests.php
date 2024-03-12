@@ -45,7 +45,7 @@ class HandleInertiaRequests extends Middleware
             'cart' => CartHelper::getItems($request),
             'cats' => Category::getMap(),
             'auth.user' => fn () => $request->user()
-                ? array_merge($request->user()->only('id', 'name', 'email'), $request->user()->role->toArray())
+                ? array_merge($request->user()->only('id', 'name', 'email', 'phone', 'company'), $request->user()->role->toArray())
                 : null,
         ]);
     }
