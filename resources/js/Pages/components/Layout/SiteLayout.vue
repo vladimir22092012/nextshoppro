@@ -177,97 +177,20 @@
                                         <li class="nav-links__item"><a href="/"><span>Сервисный центр</span></a></li>
                                     </ul>
                                 </div>
-                                <!-- .nav-links / end -->
-<!--                                <div class="nav-panel__indicators">
-                                    <div @click="showDropDown('openedCart')" :class="{'indicator indicator&#45;&#45;trigger&#45;&#45;click': true, 'indicator&#45;&#45;opened': openedCart}">
-                                      <a href="#" class="indicator__button">
+                                <div class="nav-panel__indicators">
+                                    <div :class="{'indicator indicator--trigger--click': true, 'indicator&#45;&#45;opened': openedCart}">
+                                      <a  @click="showDropDown('openedCart')" href="#" class="indicator__button">
                                       <span class="indicator__area">
                                         <svg width="20px" height="20px"><use xlink:href="images/sprite.svg#cart-20"></use></svg>
-                                        <span class="indicator__value">3</span>
+                                        <span class="indicator__value">{{cart.items.length}}</span>
                                       </span>
                                       </a>
-                                        <div class="indicator__dropdown">
-                                            &lt;!&ndash; .dropcart &ndash;&gt;
-                                            <div class="dropcart">
-                                                <div class="dropcart__products-list">
-                                                    <div class="dropcart__product">
-                                                        <div class="dropcart__product-image">
-                                                            <a href="product.html"><img src="images/products/product-1.jpg" alt=""></a>
-                                                        </div>
-                                                        <div class="dropcart__product-info">
-                                                            <div class="dropcart__product-name"><a href="product.html">Electric Planer Brandix KL370090G 300 Watts</a></div>
-                                                            <ul class="dropcart__product-options">
-                                                                <li>Color: Yellow</li>
-                                                                <li>Material: Aluminium</li>
-                                                            </ul>
-                                                            <div class="dropcart__product-meta"><span class="dropcart__product-quantity">2</span> x <span class="dropcart__product-price">$699.00</span></div>
-                                                        </div>
-                                                        <button type="button" class="dropcart__product-remove btn btn-light btn-sm btn-svg-icon">
-                                                            <svg width="10px" height="10px">
-                                                                <use xlink:href="images/sprite.svg#cross-10"></use>
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                    <div class="dropcart__product">
-                                                        <div class="dropcart__product-image">
-                                                            <a href="product.html"><img src="images/products/product-2.jpg" alt=""></a>
-                                                        </div>
-                                                        <div class="dropcart__product-info">
-                                                            <div class="dropcart__product-name"><a href="product.html">Undefined Tool IRadix DPS3000SY 2700 watts</a></div>
-                                                            <div class="dropcart__product-meta"><span class="dropcart__product-quantity">1</span> x <span class="dropcart__product-price">$849.00</span></div>
-                                                        </div>
-                                                        <button type="button" class="dropcart__product-remove btn btn-light btn-sm btn-svg-icon">
-                                                            <svg width="10px" height="10px">
-                                                                <use xlink:href="images/sprite.svg#cross-10"></use>
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                    <div class="dropcart__product">
-                                                        <div class="dropcart__product-image">
-                                                            <a href="product.html"><img src="images/products/product-5.jpg" alt=""></a>
-                                                        </div>
-                                                        <div class="dropcart__product-info">
-                                                            <div class="dropcart__product-name"><a href="product.html">Brandix Router Power Tool 2017ERXPK</a></div>
-                                                            <ul class="dropcart__product-options">
-                                                                <li>Color: True Red</li>
-                                                            </ul>
-                                                            <div class="dropcart__product-meta"><span class="dropcart__product-quantity">3</span> x <span class="dropcart__product-price">$1,210.00</span></div>
-                                                        </div>
-                                                        <button type="button" class="dropcart__product-remove btn btn-light btn-sm btn-svg-icon">
-                                                            <svg width="10px" height="10px">
-                                                                <use xlink:href="images/sprite.svg#cross-10"></use>
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div class="dropcart__totals">
-                                                    <table>
-                                                        <tbody>
-                                                        <tr>
-                                                            <th>Subtotal</th>
-                                                            <td>$5,877.00</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Shipping</th>
-                                                            <td>$25.00</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Tax</th>
-                                                            <td>$0.00</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Total</th>
-                                                            <td>$5,902.00</td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                                <div class="dropcart__buttons"><a class="btn btn-secondary" href="cart.html">View Cart</a> <a class="btn btn-primary" href="checkout.html">Checkout</a></div>
-                                            </div>
-                                            &lt;!&ndash; .dropcart / end &ndash;&gt;
-                                        </div>
+                                        <cart-component
+                                            ref="cart"
+                                            :pcart="cart">
+                                        </cart-component>
                                     </div>
-                                </div>-->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -348,6 +271,7 @@
 <script>
 import { router } from '@inertiajs/vue3'
 import HeaderVue from "@/Pages/components/Layout/HeaderVue.vue";
+import CartComponent from "@/Pages/components/Layout/CartComponent.vue";
 import bootstrapCss from "@/template/vendor/bootstrap-4.2.1/css/bootstrap.min.css"
 import owlCss from "@/template/vendor/owl-carousel-2.3.4/assets/owl.carousel.min.css"
 import cssCss from "@/template/css/style.css"
@@ -360,6 +284,7 @@ export default {
     components: {
         HeaderVue,
         Link,
+        CartComponent
     },
     data() {
         return {
@@ -370,17 +295,24 @@ export default {
           openedCart: false,
           query: '',
           cats: this.$page?.props?.cats,
+          cart: this.$page?.props?.cart,
         }
     },
     mounted() {
-      /*document.addEventListener('click', event => {
-        console.log(event.target)
-      }, false)*/
       if (window.location.pathname === '/') {
         this.showCategories = true;
       }
-      router.on('start', (event) => {
-          console.log(`Starting a visit to ${event.detail.visit.url}`)
+      router.on('finish', (event) => {
+        console.log(event.detail.visit.url.pathname === '/')
+        if (event.detail.visit.url.pathname === '/') {
+          this.showCategories = true;
+        } else {
+          this.showCategories = false;
+        }
+        this.mobileMenu = false;
+        this.openMobileSearch = false;
+        this.showAccountDropdown = false;
+        this.openedCart = false;
       })
     },
     methods: {

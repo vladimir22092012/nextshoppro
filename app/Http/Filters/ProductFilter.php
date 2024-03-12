@@ -13,6 +13,24 @@ class ProductFilter extends AbstractFilter
     public const PRICE = 'price';
     public const CATEGORY_ID = 'category_id';
 
+    public const PRICE_RANGE = 'priceRange';
+
+    protected function getCallbacks(): array
+    {
+        return [
+            self::NAME => [$this, 'name'],
+            self::PRICE => [$this, 'price'],
+            self::CATEGORY_ID => [$this, 'category_id'],
+            self::PRICE_RANGE => [$this, 'priceRange'],
+        ];
+    }
+
+    public function priceRange(Builder $builder, $value): void
+    {
+        $builder->where('price', '>=', $value['min'])
+            ->where('price', '<=', $value['max']);
+    }
+
     public function name(Builder $builder, $value): void
     {
         $value = mb_strtolower($value);
@@ -29,12 +47,4 @@ class ProductFilter extends AbstractFilter
         $builder->whereIn('category_id', Category::childs(intval($value)));
     }
 
-    protected function getCallbacks(): array
-    {
-        return [
-            self::NAME => [$this, 'name'],
-            self::PRICE => [$this, 'price'],
-            self::CATEGORY_ID => [$this, 'category_id'],
-        ];
-    }
 }

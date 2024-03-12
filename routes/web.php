@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,7 @@ Route::get('/', [SiteController::class, 'index'])->name('/');
 Route::get('/catalog/{cat_id?}', [SiteController::class, 'catalog'])->name('catalog');
 Route::get('/search/{q?}', [SiteController::class, 'search'])->name('search');
 Route::get('/product/{product}', [SiteController::class, 'view'])->name('product');
+Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout');
 
 
 /** Всё для авторизации */

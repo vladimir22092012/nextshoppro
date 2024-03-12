@@ -74,87 +74,47 @@ class ProductRepository extends CommonRepository implements CommonRepositoryInte
 
     public function get(Request $request): array
     {
-        $data = $request->all();
-        $limit = $data['limit'] ?? 18;
-        $page = $data['page'] ?? 1;
-        $sort = $data['sort'] ?? 'id';
-        $order = $data['order'] ?? 'desc';
+        $temp = $request->all();
+        $data = $temp['filters'] ?? [];
+        $limit = $temp['limit'] ?? 18;
+        $page = $temp['page'] ?? 1;
+        $sort = $temp['sort'] ?? 'id';
+        $order = $temp['order'] ?? 'desc';
 
         $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($data)]);
         $query = Product::filter($filter)->with(['category'])->orderBy($sort, $order);
-
-        if (isset($data['query'])) {
-            $q = $data['query'];
+        if (isset($temp['query'])) {
+            $q = $temp['query'];
             $fireWind = new FireWind();
-            $query = $fireWind->make_index($q);
+            $query_indexes = $fireWind->make_index($q);
             $result = [];
             $products = Product::all();
             foreach ($products as $product) {
-                $range = $fireWind->search($query, json_decode($product->search_indexes));
+                $range = $fireWind->search($query_indexes, json_decode($product->search_indexes));
                 if ($range > 0) {
                     $result[$product->id] = $range;
                 }
             }
             if (isset($result)) {
                 arsort( $result , SORT_ASC);
-                $searchQeury = Product::query()->whereIn('id', array_chunk(array_keys($result), 15)[0]);
-
-                $count = $searchQeury->count();
-
-                if ($limit > 0) {
-                    $searchQeury = $searchQeury->limit($limit)->offset(($page - 1) * $limit);
+                if (!empty($result)) {
+                    $query->whereIn('id', array_chunk(array_keys($result), 15)[0]);
                 }
-
-
-                $items = ProductResource::collection($searchQeury->get())->resolve();
-            } else {
-                $count = 0;
-                $items = [];
             }
 
-            /*$categoryQuery = Category::query();
-            $categoryQuery->select(DB::raw("id,(MATCH (categories.name) against ('$q' IN NATURAL LANGUAGE MODE)) as score_name"));
-            $cats = $categoryQuery->get()->pluck('id');
-
-            $searchQeury = Product::query();
-            $arr = explode(' ', $q);
-            $searchQeury->select(DB::raw("id,category_id,(MATCH (products.name) against ('$q' IN NATURAL LANGUAGE MODE)) as score_name"));
-            $searchQeury->whereIn('category_id', $cats);
-            $searchQeury->groupBy('score_name','id', 'category_id');
-            $searchQeury->having('score_name', '>', count($arr));
-            $searchQeury->orderBy('score_name', 'ASC');
-
-            if ($request->deleted) {
-                $searchQeury->withTrashed();
-            }
-
-            $count = $searchQeury->count();
-
-            if ($limit > 0) {
-                $searchQeury = $searchQeury->limit($limit)->offset(($page - 1) * $limit);
-            }
-
-            $products = [];
-            foreach ($searchQeury->get() as $product) {
-                $products[] = Product::find($product->id);
-            }
-            $items = ProductResource::collection($products)->resolve();*/
-
-        } else {
-            if ($request->deleted) {
-                $query->withTrashed();
-            }
-
-            $count = $query->count();
-
-            if ($limit > 0) {
-                $query = $query->limit($limit)->offset(($page - 1) * $limit);
-            }
-
-            $items = ProductResource::collection($query->get())->resolve();
         }
 
+        if ($request->deleted) {
+            $query->withTrashed();
+        }
 
+        $count = $query->count();
+
+        if ($limit > 0) {
+            $query = $query->limit($limit)->offset(($page - 1) * $limit);
+        }
+
+        $items = ProductResource::collection($query->get())->resolve();
 
         return [
             'data' => $items,

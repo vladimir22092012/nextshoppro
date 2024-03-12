@@ -15,8 +15,8 @@
     <div class="product-card__actions">
       <div class="product-card__prices">{{product.price}}</div>
       <div class="product-card__buttons">
-        <button class="btn btn-primary product-card__addtocart" type="button">В корзину</button>
-        <button class="btn btn-secondary product-card__addtocart product-card__addtocart--list" type="button">Добавить в корзину</button>
+        <button class="btn btn-primary product-card__addtocart" @click.prevent="addToCard(product.id)" type="button">В корзину</button>
+        <button class="btn btn-secondary product-card__addtocart product-card__addtocart--list"  @click.prevent="addToCard(product.id)" type="button">Добавить в корзину</button>
         <button class="btn btn-light btn-svg-icon btn-svg-icon--fake-svg product-card__wishlist" type="button">
           <svg width="16px" height="16px">
             <use xlink:href="/images/sprite.svg#wishlist-16"></use>
@@ -30,17 +30,21 @@
   </div>
 </template>
 <script>
-import {Link} from "@inertiajs/vue3";
+import {router, Link} from "@inertiajs/vue3";
+import Cart from "@/Pages/Mixins/Cart.vue"
 
 export default {
   components: {
     Link
   },
+    mixins: [Cart],
   props: {
     product: {},
   },
-  mounted() {
-
+  methods: {
+      addToCart(product_id) {
+          Cart.addToCard(product_id)
+      }
   }
 }
 </script>

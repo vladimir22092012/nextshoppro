@@ -164,7 +164,10 @@ export default {
 
             this.filter()
         },
-        filter() {
+        startingFilter(filters) {
+          this.filter(filters)
+        },
+        filter(filters) {
             let data = {
                 ...this.initialData,
                 ...this.filterData,
@@ -173,6 +176,13 @@ export default {
                 sort: this.multipleSort ? this.multipleSortFields : this.currentSort,
                 order: this.multipleSort ? this.multipleOrderBy : this.currentOrder,
                 resetFilters: this.resetFiltersValue
+            }
+
+            if (filters !== undefined) {
+              data = {
+                ...data,
+                filters
+              }
             }
 
             this.$emit('filtered', data)

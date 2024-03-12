@@ -21,6 +21,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/catalog', [SiteController::class, 'filter'])->name('api.catalog');
 
+Route::group(['prefix' => 'cart'], function () {
+    Route::post('/addToCart', [\App\Http\Controllers\CartController::class, 'addToCard'])->name('cart.addToCart');
+    Route::post('/deleteProduct', [\App\Http\Controllers\CartController::class, 'deleteProduct'])->name('cart.deleteProduct');
+});
 
 /** Панель управления*/
 Route::group(['middleware' => ['auth:sanctum', 'panel_user']], function (){

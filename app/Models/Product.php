@@ -18,6 +18,7 @@ class Product extends Model
 
     protected $appends = [
         'formattedPrice',
+        'actualPrice',
         'normalizeImages',
         'mainImage'
     ];
@@ -34,7 +35,12 @@ class Product extends Model
 
     public function getFormattedPriceAttribute(): string
     {
-        return $this->price . ' Руб.';
+        return $this->actualPrice . ' Руб.';
+    }
+
+    public function getActualPriceAttribute()
+    {
+        return $this->price;
     }
 
     public function getNormalizeImagesAttribute(): array
