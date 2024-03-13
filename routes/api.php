@@ -39,6 +39,11 @@ Route::group(['middleware' => ['auth:sanctum', 'panel_user']], function (){
             ->name('api.admin.product.save');
         Route::get('/product/delete/{product}', [\App\Http\Controllers\Admin\ProductsController::class, 'delete'])
             ->name('api.admin.product.delete');
+
+        Route::get('/orders', [\App\Http\Controllers\Admin\OrdersController::class, 'get'])
+            ->name('api.admin.orders');
+        Route::post('/order/save/{order}', [\App\Http\Controllers\Admin\OrdersController::class, 'save'])
+            ->name('api.admin.order.save');
     });
 
 

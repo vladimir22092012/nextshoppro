@@ -87,7 +87,7 @@
                             <a class="collapse-item" href="/">Архив товаров</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">Клиенты:</h6>
-                            <a class="collapse-item" href="/">Заказы</a>
+                            <a class="collapse-item" :href="route('admin.orders')">Заказы</a>
                             <a class="collapse-item" href="/">Клиенты</a>
                         </div>
                     </div>

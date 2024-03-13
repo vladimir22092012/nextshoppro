@@ -3,22 +3,18 @@
 namespace App\Repositories;
 
 use App\Helpers\CartHelper;
-use App\Http\Filters\ProductFilter;
+use App\Http\Filters\OrderFilter;
+use App\Http\Resources\OrderResource;
 use App\Http\Resources\ProductResource;
-use App\Models\AspCode;
 use App\Models\Cart;
-use App\Models\Category;
 use App\Models\Order;
 use App\Models\OrderProduct;
-use App\Models\Product;
 use App\Models\Role;
 use App\Models\User;
 use App\Repositories\Interfaces\CommonRepositoryInterface;
-use App\Services\GlobalSearch\FireWind;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class OrderRepository extends CommonRepository implements CommonRepositoryInterface {
 
@@ -36,35 +32,23 @@ class OrderRepository extends CommonRepository implements CommonRepositoryInterf
                 'field_search' => true,
             ],
             [
-                'field' => 'article',
-                'title' => 'Артикул',
+                'field' => 'firstname',
+                'title' => 'Фамилия',
                 'sortable' => false,
                 'field_search' => true,
             ],
             [
                 'field' => 'name',
-                'title' => 'Наименование',
+                'title' => 'Имя',
                 'sortable' => true,
                 'sort' => 'desc',
                 'field_search' => true,
             ],
             [
-                'field' => 'price',
-                'title' => 'Цена',
+                'field' => 'lastname',
+                'title' => 'Отчество',
                 'sortable' => true,
                 'field_search' => true,
-            ],
-            [
-                'field' => 'count',
-                'title' => 'Кол-во на складе',
-                'sortable' => true,
-                'field_search' => false,
-            ],
-            [
-                'field' => 'category_name',
-                'title' => 'Категория',
-                'sortable' => false,
-                'field_search' => false,
             ],
             [
                 'field' => 'deleted_at',
@@ -84,7 +68,7 @@ class OrderRepository extends CommonRepository implements CommonRepositoryInterf
         $sort = $temp['sort'] ?? 'id';
         $order = $temp['order'] ?? 'desc';
 
-        $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($data)]);
+        $filter = app()->make(OrderFilter::class, ['queryParams' => array_filter($data)]);
         $query = Order::filter($filter)->orderBy($sort, $order);
 
         if ($request->deleted) {
@@ -97,7 +81,7 @@ class OrderRepository extends CommonRepository implements CommonRepositoryInterf
             $query = $query->limit($limit)->offset(($page - 1) * $limit);
         }
 
-        $items = ProductResource::collection($query->get())->resolve();
+        $items = OrderResource::collection($query->get())->resolve();
 
         return [
             'data' => $items,
@@ -110,14 +94,14 @@ class OrderRepository extends CommonRepository implements CommonRepositoryInterf
         ];
     }
 
-    public function delete($product): void
+    public function delete($order): void
     {
-        $product->delete();
+        $order->delete();
     }
 
-    public function update($data, $product): void
+    public function update($data, $order): void
     {
-        $product->update($data);
+        $order->update($data);
     }
 
     public function create($data, $request)

@@ -68,6 +68,15 @@ Route::group(['middleware' => ['auth:sanctum', 'panel_user']], function (){
                 ->name('admin.product');
         });
 
+        Route::group(['prefix' => 'orders'], function () {
+            Route::get('/', [\App\Http\Controllers\Admin\OrdersController::class, 'index'])
+                ->name('admin.orders');
+            Route::get('/form', [\App\Http\Controllers\Admin\OrdersController::class, 'form'])
+                ->name('admin.orders.form');
+            Route::get('/{order}', [\App\Http\Controllers\Admin\OrdersController::class, 'view'])
+                ->name('admin.order');
+        });
+
     });
 
 
