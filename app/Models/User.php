@@ -52,11 +52,7 @@ class User extends Authenticatable
      */
     public function getHomeUrlAttribute(): string
     {
-        $route = '/';
-        if ($this->role->name != Role::ROLE_USER) {
-            $route = '/admin';
-        }
-        return $route;
+        return '/cabinet';
     }
 
 }

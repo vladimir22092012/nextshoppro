@@ -26,6 +26,10 @@ Route::group(['prefix' => 'cart'], function () {
     Route::post('/deleteProduct', [\App\Http\Controllers\CartController::class, 'deleteProduct'])->name('cart.deleteProduct');
 });
 
+Route::group(['prefix' => 'order'], function () {
+    Route::post('/create', [\App\Http\Controllers\OrderController::class, 'create'])->name('order.create');
+});
+
 /** Панель управления*/
 Route::group(['middleware' => ['auth:sanctum', 'panel_user']], function (){
     Route::group(['prefix' => 'admin'], function () {

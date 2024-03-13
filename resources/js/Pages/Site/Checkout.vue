@@ -10,47 +10,40 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="checkout-first-name">Фамилия</label>
-                                    <input v-model="form.firstname" type="text" class="form-control" placeholder="Фамилия">
+                                    <input v-model="form.firstname" type="text" :class="{'form-control': true, 'is-invalid': errors.firstname}" placeholder="Фамилия">
+                                    <div class="invalid-feedback">{{errors.firstname}}</div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="checkout-last-name">Имя</label>
-                                    <input v-model="form.name" type="text" class="form-control" placeholder="Имя">
+                                    <input v-model="form.name" type="text" :class="{'form-control': true, 'is-invalid': errors.name}" placeholder="Имя">
+                                    <div class="invalid-feedback">{{errors.name}}</div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="checkout-company-name">Отчество <span class="text-muted">(если есть)</span></label>
-                                <input v-model="form.lastname" type="text" class="form-control" placeholder="Отчество">
+                                <input v-model="form.lastname" type="text" :class="{'form-control': true, 'is-invalid': errors.lastname}" placeholder="Отчество">
+                                <div class="invalid-feedback">{{errors.lastname}}</div>
                             </div>
                             <div class="form-group">
                                 <label for="checkout-street-address">Компания</label>
-                                <input v-model="form.company" type="text" class="form-control" placeholder="Компания">
+                                <input v-model="form.company" type="text" :class="{'form-control': true, 'is-invalid': errors.company}" placeholder="Компания">
+                                <div class="invalid-feedback">{{errors.company}}</div>
                             </div>
                             <div class="form-group">
                                 <label for="checkout-address">Адрес доставки <span class="text-muted">(начинайте вводить)</span></label>
                                 <Suggessions v-model="form.address"></Suggessions>
+                                <div style="display: block" class="invalid-feedback">{{errors.address}}</div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="checkout-street-address">Телефон</label>
-                                    <input v-model="form.phone" type="text" class="form-control" placeholder="Телефон">
+                                    <InputMask v-model="form.phone" mask="+7(999)999-99-99" placeholder="+7(999)999-99-99"  :class="{'form-control p-invalid': true, 'is-invalid': errors.phone}"/>
+                                    <div class="invalid-feedback">{{errors.phone}}</div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="checkout-street-address">Email</label>
-                                    <input v-model="form.email" type="text" class="form-control" placeholder="Email">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-check">
-                                    <span class="form-check-input input-check">
-                                        <span class="input-check__body">
-                                            <input v-model="form.create_account" class="input-check__input" type="checkbox" id="checkout-create-account">
-                                            <span class="input-check__box"></span>
-                                            <svg class="input-check__icon" width="9px" height="7px">
-                                              <use xlink:href="/images/sprite.svg#check-9x7"></use>
-                                            </svg>
-                                        </span>
-                                    </span>
-                                    <label class="form-check-label" for="checkout-create-account">Создать аккаунт для Вас?</label>
+                                    <input v-model="form.email" type="text" :class="{'form-control': true, 'is-invalid': errors.email}" placeholder="Email">
+                                    <div class="invalid-feedback">{{errors.email}}</div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -165,11 +158,17 @@
 <script>
 import SiteLayout from "@/Pages/components/Layout/SiteLayout.vue";
 import Suggessions from "@/Pages/components/Layout/Suggessions.vue";
+import InputMask from 'primevue/inputmask';
+import { router } from '@inertiajs/vue3'
+
+
+import axios from "axios";
 
 export default {
     layout: SiteLayout,
     components: {
-        Suggessions
+        Suggessions,
+        InputMask
     },
     data() {
         return {
@@ -186,8 +185,8 @@ export default {
                 phone: '',
                 email: '',
                 comment: '',
-                create_account: false,
             },
+            errors: {},
         }
     },
     created() {
@@ -202,12 +201,25 @@ export default {
     },
     methods: {
         checkout() {
+            let data = {
+                ...this.form,
+                delivery_type: this.deliveryType,
+                payment_type: this.paymentType,
+            }
+            this.errors = {}
+            axios.post(route('order.create'), data).then(response => {
+                router.visit(route('login'))
+            }).catch(error => {
+                Object.keys(error.response.data.errors).map((key) => {
+                    this.errors[key] = error.response.data.errors[key][0]
+                })
+            })
             //this.fulladdress()
         },
         fulladdress() {
             var url = "https://cleaner.dadata.ru/api/v1/clean/address";
-            var token = "cc38b3ba0f9e4bb8f9a5f382dbcc2974836bbbc3";
-            var secret = "8ba52173f32179d6f474e662dc62e432fc3f3055";
+            var token = import.meta.env.VITE_APP_DADATA_API_KEY;
+            var secret = import.meta.env.VITE_APP_DADATA_SECRET_KEY;
 
             var options = {
                 method: "POST",
