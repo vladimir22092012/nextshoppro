@@ -59,7 +59,7 @@
                          data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Список моделей:</h6>
-                            <a class="collapse-item" href="/">Пользователи</a>
+                            <a class="collapse-item" href="/admin/users">Пользователи</a>
                         </div>
                     </div>
                 </li>

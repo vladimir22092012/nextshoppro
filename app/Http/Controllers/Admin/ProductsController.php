@@ -37,6 +37,7 @@ class ProductsController extends Controller
     public function view(Product $product):\Inertia\Response
     {
         return Inertia::render('Admin/Products/View', [
+            'categories' => Category::getMap(),
             'product' => ProductResource::make($product)->resolve(),
         ]);
     }

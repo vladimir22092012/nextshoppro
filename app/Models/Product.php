@@ -14,7 +14,19 @@ class Product extends Model
 {
     use HasFactory, SoftDeletes, Filterable;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'category_id',
+        'article',
+        'name',
+        'short_description',
+        'description',
+        'price',
+        'count',
+        'deleted_at',
+        'created_at',
+        'updated_at',
+        'search_indexes',
+    ];
 
     protected $appends = [
         'formattedPrice',

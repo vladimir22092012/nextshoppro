@@ -33,6 +33,13 @@ Route::group(['prefix' => 'order'], function () {
 /** Панель управления*/
 Route::group(['middleware' => ['auth:sanctum', 'panel_user']], function (){
     Route::group(['prefix' => 'admin'], function () {
+
+        Route::get('/users', [\App\Http\Controllers\Admin\MainController::class, 'usersList'])
+            ->name('api.admin.users');
+
+        Route::post('/users/save/{user}', [\App\Http\Controllers\Admin\MainController::class, 'saveUser'])
+            ->name('api.admin.user.save');
+
         Route::get('/products', [\App\Http\Controllers\Admin\ProductsController::class, 'get'])
             ->name('api.admin.products');
         Route::post('/product/save/{product}', [\App\Http\Controllers\Admin\ProductsController::class, 'save'])
