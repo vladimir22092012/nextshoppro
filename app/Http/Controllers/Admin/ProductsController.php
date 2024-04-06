@@ -28,6 +28,14 @@ class ProductsController extends Controller
         ]);
     }
 
+    public function archive(): \Inertia\Response
+    {
+        return Inertia::render('Admin/Products/Archive', [
+            'columns' => $this->repository->columns(),
+            'limits' => $this->repository->limits(),
+        ]);
+    }
+
     public function form(): \Inertia\Response
     {
         return Inertia::render('Admin/Products/Form', [
@@ -39,6 +47,7 @@ class ProductsController extends Controller
         return Inertia::render('Admin/Products/View', [
             'categories' => Category::getMap(),
             'product' => ProductResource::make($product)->resolve(),
+            'discountAmount' => $product->discount?->amount ?? 0,
         ]);
     }
 
@@ -46,6 +55,12 @@ class ProductsController extends Controller
     {
         $request->deleted = true;
         return response()->json(['data' => $this->repository->get($request)]);
+    }
+
+    public function archiveProducts(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $request->deleted = true;
+        return response()->json(['data' => $this->repository->get($request, true)]);
     }
 
     public function delete(Product $product): \Illuminate\Http\JsonResponse

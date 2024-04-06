@@ -64,7 +64,7 @@ class UserRepository extends CommonRepository implements CommonRepositoryInterfa
         ];
     }
 
-    public function get(Request $request): array
+    public function get(Request $request, $onlyClients = false): array
     {
         $temp = $request->all();
         $data = $temp['filters'] ?? [];
@@ -74,7 +74,11 @@ class UserRepository extends CommonRepository implements CommonRepositoryInterfa
         $order = $temp['order'] ?? 'desc';
 
         $filter = app()->make(UserFilter::class, ['queryParams' => array_filter($data)]);
-        $query = User::filter($filter)->whereNotIn('role_id', [1])->with(['role'])->orderBy($sort, $order);
+        $query = User::filter($filter)->whereNotIn('role_id', [1]);
+        if ($onlyClients) {
+            $query->where('role_id', '=', 3);
+        }
+        $query->with(['role'])->orderBy($sort, $order);
 
         $query->withTrashed();
 

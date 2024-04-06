@@ -236,6 +236,9 @@ export default {
             this.filter()
         },
         filter() {
+            const params = new URLSearchParams(window.location.search);
+            let cat = params.get('cat');
+
             let data = {
                 ...this.initialData,
                 ...this.filterData,
@@ -243,6 +246,10 @@ export default {
                 page: this.selectedPage,
                 sort: this.currentSort,
                 order: this.currentOrder,
+            }
+
+            if (cat !== undefined) {
+                data.category_id = cat;
             }
 
             this.$emit('filtered', data)

@@ -72,7 +72,7 @@ class ProductRepository extends CommonRepository implements CommonRepositoryInte
         return ProductResource::collection($products)->resolve();
     }
 
-    public function get(Request $request): array
+    public function get(Request $request, $onlyArchive = false): array
     {
         $temp = $request->all();
         $data = $temp['filters'] ?? [];
@@ -81,8 +81,16 @@ class ProductRepository extends CommonRepository implements CommonRepositoryInte
         $sort = $temp['sort'] ?? 'id';
         $order = $temp['order'] ?? 'desc';
 
+        if (isset($temp['category_id'])) {
+            $data['category_id'] = $temp['category_id'];
+        }
+
         $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($data)]);
-        $query = Product::filter($filter)->with(['category'])->orderBy($sort, $order);
+        $query = Product::filter($filter);
+        if ($onlyArchive) {
+            $query->whereNotNull('deleted_at');
+        }
+        $query->with(['category'])->orderBy($sort, $order);
         if (isset($temp['query'])) {
             $q = $temp['query'];
             $fireWind = new FireWind();
@@ -107,7 +115,6 @@ class ProductRepository extends CommonRepository implements CommonRepositoryInte
         if ($request->deleted) {
             $query->withTrashed();
         }
-
         $count = $query->count();
 
         if ($limit > 0) {

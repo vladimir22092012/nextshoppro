@@ -42,8 +42,14 @@
                 <p v-if="show.phone"><b>Телефон: </b> {{show.phone}}</p>
                 <p><b>Дата регистрации: </b> {{show.created_at}}</p>
                 <p v-if="show.deleted_at"><b>Дата удаления: </b> {{show.deleted_at}}</p>
-<!--                <p><b>Роль: </b> {{show.role.role}}</p>-->
+                <!--                <p><b>Роль: </b> {{show.role.role}}</p>-->
                 <button @click="editable = true" class="btn btn-outline-primary">Редактировать</button>
+            </div>
+        </div>
+        <div class="card shadow mb-4 col-md-5">
+            <div class="card-body">
+                <p><b>Скидка клиента: (%) </b> <input type="text" class="form-control form-control-user" v-model="discount"></p>
+                <button @click="saveDiscount" class="btn btn-outline-primary">Сохранить</button>
             </div>
         </div>
     </div>
@@ -61,10 +67,12 @@ export default {
     props: {
         user: {},
         roles: {},
+        discountAmount: String,
     },
     data() {
         return {
             editable: false,
+            discount: this.discountAmount,
             form: Object.assign({}, this.user),
             show: Object.assign({}, this.user),
         }
@@ -72,6 +80,47 @@ export default {
     methods: {
         nameWithId ({ name, id }) {
             return `${name}`
+        },
+        saveDiscount() {
+            this.$swal({
+                position: "center",
+                icon: "warning",
+                showCancelButton: true,
+                title: `Вы уверены что хотите сохранить изменения?`,
+                confirmButtonText: "Да",
+                cancelButtonText: "Нет",
+            }).then((userAnswer) => {
+                if (userAnswer.isConfirmed) {
+                    let data = {
+                        discount: this.discount,
+                        type: 'user',
+                        modelId: this.form.id,
+                    }
+                    axios.post(route('api.admin.discount.save'), data).then((response) => {
+                        if (response.data.status === 'ok') {
+                            this.$swal({
+                                position: "top-end",
+                                icon: "success",
+                                title: "Скидка успешно обновлена",
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        } else {
+                            this.$swal({
+                                icon: "error",
+                                title: "Упс...",
+                                text: "Произошла ошибка, попробуйте операцию позже!",
+                            })
+                        }
+                    }).catch((error) => {
+                        this.$swal({
+                            icon: "error",
+                            title: "Упс...",
+                            text: error.responseText,
+                        })
+                    })
+                }
+            });
         },
         save() {
             this.$swal({

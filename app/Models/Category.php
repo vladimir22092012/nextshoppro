@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
@@ -66,6 +67,11 @@ class Category extends Model
             $ids[] = $cat->id;
         }
         return $ids;
+    }
+
+    public function discount(): MorphOne
+    {
+        return $this->morphOne(Discount::class, 'discountable');
     }
 
 }

@@ -42,8 +42,8 @@
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Общие:</h6>
-                            <a class="collapse-item" href="/">Уведомления</a>
-                            <a class="collapse-item" href="/">Настройки</a>
+                            <a class="collapse-item" href="/">Уведомления (не акт.)</a>
+                            <a class="collapse-item" href="/">Настройки (не акт.)</a>
                         </div>
                     </div>
                 </li>
@@ -59,7 +59,7 @@
                          data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Список моделей:</h6>
-                            <a class="collapse-item" href="/admin/users">Пользователи</a>
+                            <a class="collapse-item" :href="route('admin.users')">Пользователи</a>
                         </div>
                     </div>
                 </li>
@@ -84,11 +84,32 @@
                             <h6 class="collapse-header">Товары:</h6>
                             <a class="collapse-item" :href="route('admin.products')">Список товаров</a>
                             <a class="collapse-item" :href="route('admin.products.form')">Добавить товар</a>
-                            <a class="collapse-item" href="/">Архив товаров</a>
+                            <a class="collapse-item" :href="route('admin.products.archive')">Архив товаров</a>
                             <div class="collapse-divider"></div>
                             <h6 class="collapse-header">Клиенты:</h6>
                             <a class="collapse-item" :href="route('admin.orders')">Заказы</a>
-                            <a class="collapse-item" href="/">Клиенты</a>
+                            <a class="collapse-item" :href="route('admin.clients')">Клиенты</a>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Heading -->
+                <div class="sidebar-heading">
+                    Дерево категорий
+                </div>
+
+                <li v-for="mainCat in cats" class="nav-item">
+                    <a :class="{'nav-link': true, 'collapsed': mainCat.opened === false}" href="#" data-toggle="collapse" :data-target="'#collapseDom'+mainCat.id"
+                       aria-expanded="true" aria-controls="collapsePages">
+                        <i class="fas fa-fw fa-folder"></i>
+                        <span><a @dblclick="goToProducts(mainCat)" @click.prevent="showHideCat(mainCat)" style="color:#fff" :href="'/admin/products?cat='+mainCat.id">{{mainCat.name}}</a></span>
+                    </a>
+                    <div :id="'#collapseDom'+mainCat.id" :class="{'collapse': true, 'show': mainCat.opened}" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                        <div v-for="secondCat in mainCat.dom" class="bg-white py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">
+                                <a @click.prevent="goToProducts(secondCat)" :href="'/admin/products?'+secondCat.id">{{secondCat.name}}</a>
+                            </h6>
+                            <a v-for="thirdCat in secondCat.dom" @click.prevent="goToProducts(thirdCat)" class="collapse-item" :href="'/admin/products?'+thirdCat.id">{{thirdCat.name}}</a>
                         </div>
                     </div>
                 </li>
@@ -312,19 +333,32 @@
 </template>
 <script>
 import appCssAdmin from "@/styles/sb-admin-2.css"
+import route from "ziggy-js";
 export default {
     components: {},
     data() {
         return {
             user: this.$page?.props?.auth?.user,
+            cats: this.$page?.props.cats,
         }
     },
     mounted() {
-
     },
     methods: {
         logout() {
             this.$inertia.get(route('logout'));
+        },
+        showHideCat(cat) {
+            setTimeout(function() {
+                if (cat.opened === false) {
+                    cat.opened = true
+                } else {
+                    cat.opened = false
+                }
+            }, 500)
+        },
+        goToProducts(cat) {
+            this.$inertia.get(route('admin.products', {'cat': cat.id}))
         }
     }
 }

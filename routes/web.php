@@ -62,12 +62,17 @@ Route::group(['middleware' => ['auth:sanctum', 'panel_user']], function (){
         Route::get('/users', [\App\Http\Controllers\Admin\MainController::class, 'users'])
             ->name('admin.users');
 
+        Route::get('/clients', [\App\Http\Controllers\Admin\MainController::class, 'usersClients'])
+            ->name('admin.clients');
+
         Route::get('/user/{user}', [\App\Http\Controllers\Admin\MainController::class, 'viewUser'])
             ->name('admin.user');
 
         Route::group(['prefix' => 'products'], function () {
             Route::get('', [\App\Http\Controllers\Admin\ProductsController::class, 'index'])
                 ->name('admin.products');
+            Route::get('/archive', [\App\Http\Controllers\Admin\ProductsController::class, 'archive'])
+                ->name('admin.products.archive');
             Route::get('/form', [\App\Http\Controllers\Admin\ProductsController::class, 'form'])
                 ->name('admin.products.form');
             Route::get('/{product}', [\App\Http\Controllers\Admin\ProductsController::class, 'view'])

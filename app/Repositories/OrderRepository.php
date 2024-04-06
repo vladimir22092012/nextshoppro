@@ -104,6 +104,11 @@ class OrderRepository extends CommonRepository implements CommonRepositoryInterf
         $order->update($data);
     }
 
+    public function removeProduct($data, $order): void
+    {
+        $order->products()->where('id', '=', $data['id'])->delete();
+    }
+
     public function create($data, $request)
     {
         DB::beginTransaction();

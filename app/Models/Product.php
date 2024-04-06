@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
@@ -47,12 +48,25 @@ class Product extends Model
 
     public function getFormattedPriceAttribute(): string
     {
-        return $this->actualPrice . ' Руб.';
+        return "{$this->actualPrice}₽";
     }
 
     public function getActualPriceAttribute()
     {
-        return $this->price;
+        $dicsount = 0;
+        if (auth()->user()) {
+            $dicsount = auth()->user()->discount?->amount ?? 0;
+        } else {
+            if ($this->discount) {
+                $dicsount = $this->discount->amount;
+            }
+        }
+        if ($dicsount > 0) {
+            $amount = $this->price / 100 * $dicsount;
+            return $this->price - $amount;
+        } else {
+            return $this->price;
+        }
     }
 
     public function getNormalizeImagesAttribute(): array
@@ -85,6 +99,11 @@ class Product extends Model
     public function getFormattedSrc($product_id, $image): string
     {
         return '/images/products/'.$product_id.'/'.$image->id.'.'.$image->ext;
+    }
+
+    public function discount(): MorphOne
+    {
+        return $this->morphOne(Discount::class, 'discountable');
     }
 
 }

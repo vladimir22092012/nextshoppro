@@ -16,6 +16,7 @@ class Order extends Model
     const STATUS_NEW = 'new';
     const STATUS_ACCEPT = 'accept';
     const STATUS_READY = 'ready';
+    const STATUS_REJECT = 'reject';
     const STATUS_PAYED = 'payed';
     const STATUS_DONE = 'done';
 
@@ -49,6 +50,10 @@ class Order extends Model
             self::STATUS_DONE => [
                 'name' => 'Выдан',
                 'class' => 'alert-success',
+            ],
+            self::STATUS_REJECT => [
+                'name' => 'Отменён',
+                'class' => 'alert-danger',
             ],
         ];
         return $this->deleted_at ? Html::getAlert('В архиве', 'alert-danger') :

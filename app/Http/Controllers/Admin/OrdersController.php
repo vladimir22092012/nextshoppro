@@ -73,4 +73,17 @@ class OrdersController extends Controller
             return response()->json(['status' => 'error', 'text' => $exception->getMessage()]);
         }
     }
+
+    public function removeProduct(Order $order, Request $request): \Illuminate\Http\JsonResponse
+    {
+        try {
+            $this->repository->removeProduct($request->toArray(), $order);
+            return response()->json([
+                'status' => 'ok',
+                'product' => OrderResource::make($order->refresh())->resolve()
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json(['status' => 'error', 'text' => $exception->getMessage()]);
+        }
+    }
 }

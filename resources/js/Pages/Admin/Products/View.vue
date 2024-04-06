@@ -51,6 +51,12 @@
                 <button @click="editable = true" class="btn btn-outline-primary">Редактировать</button>
             </div>
         </div>
+        <div class="card shadow mb-4 col-md-5">
+            <div class="card-body">
+                <p><b>Скидка на товар: (%) </b> <input type="text" class="form-control form-control-user" v-model="discount"></p>
+                <button @click="saveDiscount" class="btn btn-outline-primary">Сохранить</button>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -66,10 +72,12 @@ export default {
     props: {
         product: {},
         categories: {},
+        discountAmount: String,
     },
     data() {
         return {
             editable: false,
+            discount: this.discountAmount,
             form: Object.assign({}, this.product),
             show: Object.assign({}, this.product),
         }
@@ -77,6 +85,47 @@ export default {
     methods: {
         nameWithId ({ name, id }) {
             return `${name} — [${id}]`
+        },
+        saveDiscount() {
+            this.$swal({
+                position: "center",
+                icon: "warning",
+                showCancelButton: true,
+                title: `Вы уверены что хотите сохранить изменения?`,
+                confirmButtonText: "Да",
+                cancelButtonText: "Нет",
+            }).then((userAnswer) => {
+                if (userAnswer.isConfirmed) {
+                    let data = {
+                        discount: this.discount,
+                        type: 'product',
+                        modelId: this.form.id,
+                    }
+                    axios.post(route('api.admin.discount.save'), data).then((response) => {
+                        if (response.data.status === 'ok') {
+                            this.$swal({
+                                position: "top-end",
+                                icon: "success",
+                                title: "Скидка успешно обновлена",
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+                        } else {
+                            this.$swal({
+                                icon: "error",
+                                title: "Упс...",
+                                text: "Произошла ошибка, попробуйте операцию позже!",
+                            })
+                        }
+                    }).catch((error) => {
+                        this.$swal({
+                            icon: "error",
+                            title: "Упс...",
+                            text: error.responseText,
+                        })
+                    })
+                }
+            });
         },
         save() {
             this.$swal({
